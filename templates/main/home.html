@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="categories-container">
+    <div class="search-bar">
+        <form action="{% url 'home' %}" method="get">
+            <input type="text" name="q" placeholder="Search...." class="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </form>
+    </div>
+
+    <h5> {{ Category_count }} catagories available </h5>
+    <div class="category-cards">
+        {% for catagory in catagories %}
+            <div class="category-card">
+                <p></p>
+                <a href="{% url "catagoryProviders" catagory.id %}" class="category-link"> {{ catagory.name }} </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

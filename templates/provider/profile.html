@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<div class="">
+    <h1>myProfilePage:</h1>
+
+    <ul>
+        <div>{{ provider.name }}</div>
+        <div>
+            <img src="{{ provider.profile_photo }}" width="200" height="300">
+        </div>
+ 
+         <div>{{ provider.last_name }}</div>
+        <div>{{ provider.email }}</div>
+        <div>{% if provider.gender == 'M' %}
+            Male
+            {% else %}
+            Women
+            {% endif %}</div>
+        <div>{{ provider.phone_number }}</div>
+        <div>{{ provider.price }}</div>
+        <div>categories: {{ provider.categories }}</div>
+        <div>{{ provider.description_big }}</div>
+    </ul>
+</div>
+
+<a href="{% url "providerForm" %}">Edit infos</a>
+
+
+{% endblock content %}
+
