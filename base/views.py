@@ -61,14 +61,13 @@ def registerPage(request):
     context = {'user_form': user_form}
     return render(request, 'auth/login_register.html', context)
 
-
 @login_required(login_url='login')
 def providerForm(request):
     user = request.user
     categories = Category.objects.all()
 
     if request.method == 'POST':
-        provider_form = ProviderForm(request.POST)
+        provider_form = ProviderForm(request.POST)  # Pass request.FILES for file uploads
 
         if provider_form.is_valid():
             provider = provider_form.save(commit=False)
@@ -84,7 +83,7 @@ def providerForm(request):
 
     context = {'provider_form': provider_form, 'categories': categories}
     return render(request, 'provider/providerForm.html', context)
-
+ 
         
 def registerPage(request):
     user_form = UserCreationForm()

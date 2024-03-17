@@ -33,12 +33,14 @@ def getCategories(request):
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
 
-
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@api_view(['GET'])
 def getCategorieProvider(request, pk):
-    categoryProviders = Category.objects.get(id=pk)
-    serializer = CategorySerializer(categoryProviders)
-    return Response(serializer.data) 
+    category = Category.objects.get(id=pk)
+    providers = category.participants.all()
+    serializer = ProviderSerializer(providers, many=True)
+    category_data = CategorySerializer(category).data
+    category_data['providers'] = serializer.data
+    return Response(category_data)
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
@@ -70,6 +72,11 @@ def getUser(request, pk):
 
 @api_view(['POST'])
 def login(request):
+    try:
+        username = request.data['username']
+    except KeyError:
+        return Response({'error': 'Username is missing in request data.'}, status=status.HTTP_400_BAD_REQUEST)
+    
     user = get_object_or_404(User, username=request.data['username'])
     if not user.check_password(request.data['password']):
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
@@ -77,7 +84,7 @@ def login(request):
     serializer =  UserSerializer(instance=user)
     return Response({"token": token.key, "user": serializer.data})
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def signUp(request):
     serializer =  UserSerializer(data=request.data)
     if serializer.is_valid():
